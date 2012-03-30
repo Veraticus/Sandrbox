@@ -1,4 +1,4 @@
-module Sandbox
+module Sandrbox
   class Value
     attr_accessor :line, :line_no, :result, :time, :unbound_methods, :unbound_constants
     
@@ -15,9 +15,9 @@ module Sandbox
         $SAFE = 2
         begin
           Timeout::timeout(0.5) do
-            Sandbox.config.bad_methods.each {|meth| remove_method(meth.first, meth.last)}
-            Sandbox.config.bad_constants.each {|const| remove_constant(const)}
-            self.result = eval(line, TOPLEVEL_BINDING, "sandbox", line_no)
+            Sandrbox.config.bad_methods.each {|meth| remove_method(meth.first, meth.last)}
+            Sandrbox.config.bad_constants.each {|const| remove_constant(const)}
+            self.result = eval(line, TOPLEVEL_BINDING, "sandrbox", line_no)
           end
         rescue Exception => e
           self.result = "#{e.class}: #{e.to_s}"
@@ -28,7 +28,7 @@ module Sandbox
       end
       
       timeout = t.join(3)
-      self.result = "SandboxError: execution expired" if timeout.nil?
+      self.result = "SandrboxError: execution expired" if timeout.nil?
 
       self
     end
@@ -41,7 +41,7 @@ module Sandbox
       
     def remove_method(klass, method)
       const = Object.const_get(klass.to_s)
-      if const.methods.include?(method)
+      if const.methods.include?(method) || const.instance_methods.include?(method)
         self.unbound_methods << [const, const.method(method).unbind]
         metaclass = class << const; self; end
 
@@ -60,15 +60,7 @@ module Sandbox
         end
       end
     end
-
-    def remove_constant(constant)
-      self.unbound_constants << Object.send(:remove_const, constant) if Object.const_defined?(constant)
-    end
-
-    def restore_constants
-      self.unbound_constants.each {|const| Object.const_set(const.to_s.to_sym, const) unless Object.const_defined?(const.to_s.to_sym)}
-    end
-
+    
     def restore_methods
       self.unbound_methods.each do |unbound|
         klass = unbound.first
@@ -84,7 +76,15 @@ module Sandbox
           method.bind(klass).call(*args)
         end
       end
-    end  
-    
+    end
+
+    def remove_constant(constant)
+      self.unbound_constants << Object.send(:remove_const, constant) if Object.const_defined?(constant)
+    end
+
+    def restore_constants
+      self.unbound_constants.each {|const| Object.const_set(const.to_s.to_sym, const) unless Object.const_defined?(const.to_s.to_sym)}
+    end
+        
   end
 end

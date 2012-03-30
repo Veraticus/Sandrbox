@@ -14,12 +14,12 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "Sandbox"
-  gem.homepage = "http://github.com/Veraticus/Sandbox"
+  gem.name = "Sandrbox"
+  gem.homepage = "http://github.com/Veraticus/Sandrbox"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "veraticus@gmail.com"
+  gem.summary = 'A sanitizing sandbox for executing Ruby code'
+  gem.description = 'A sandbox for that tries to change all Ruby code executed to be safe and non-destructive, both to the filesystem and the currently running process'
+  gem.email = "josh@joshsymonds.com"
   gem.authors = ["Josh Symonds"]
   # dependencies defined in Gemfile
 end
@@ -34,6 +34,11 @@ end
 RSpec::Core::RakeTask.new(:rcov) do |spec|
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rcov = true
+end
+
+desc "Open an irb session preloaded with this library"
+task :cons do
+  sh "irb -rubygems -I lib -r sandrbox.rb"
 end
 
 task :default => :spec

@@ -1,6 +1,6 @@
-require 'sandbox/options/option'
+require 'sandrbox/options/option'
 
-module Sandbox
+module Sandrbox
   
   module Config
     extend self
@@ -29,7 +29,7 @@ module Sandbox
       [:Kernel, "`".to_sym],
       [:Class, "`".to_sym]
     ]
-    option :bad_constants, :default => [:Open3, :File, :Dir, :IO, :Sandbox, :Process, :Thread, :Fiber]
+    option :bad_constants, :default => [:Open3, :File, :Dir, :IO, :Sandrbox, :Process, :Thread, :Fiber]
     
   end
 end

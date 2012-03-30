@@ -1,6 +1,6 @@
-module Sandbox
+module Sandrbox
   class Response
-    attr_accessor :array, :compressed_array, :expanded_array, :indents, :results
+    attr_accessor :array, :compressed_array, :expanded_array, :indents, :results, :old_constants
     attr_accessor :class_count, :module_count, :def_count, :end_count, :do_count, :left_curly_count, :right_curly_count, :left_bracket_count, :right_bracket_count
     
     def initialize(array)
@@ -59,7 +59,9 @@ module Sandbox
     end
     
     def evaluate
-      self.compressed_array.each_with_index {|line, line_no| self.results << Sandbox::Value.new(line, line_no)}
+      preserve_namespace
+      self.compressed_array.each_with_index {|line, line_no| self.results << Sandrbox::Value.new(line, line_no)}
+      restore_namespace
     end
     
     def semicolon(char = nil)
@@ -85,6 +87,14 @@ module Sandbox
     
     def output
       results.collect(&:to_s)
+    end
+    
+    def preserve_namespace
+      self.old_constants = Object.constants
+    end
+    
+    def restore_namespace
+      (Object.constants - self.old_constants).each {|bad_constant| Object.send(:remove_const, bad_constant)}
     end
 
   end

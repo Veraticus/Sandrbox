@@ -1,5 +1,5 @@
 # Shamelessly stolen from Mongoid!
-module Sandbox #:nodoc
+module Sandrbox #:nodoc
   module Config
 
     # Encapsulates logic for setting options.
