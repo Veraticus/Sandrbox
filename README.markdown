@@ -1,8 +1,8 @@
 # Sandrbox
 
-Sandrbox allows you to execute arbitrary Ruby code while being assured it won't destroy your life (or your server). It's intended to be small, fast, and secure. I built it to replace TryRuby's really slow Ruby sandrbox, since I wanted something faster.
+Sandrbox allows you to execute arbitrary Ruby code while being assured it won't destroy your life (or your server). It's intended to be small, fast, and secure. I built it to replace TryRuby's really slow Ruby sandbox, since I wanted something faster.
 
-Note that while I made a concentrated effort to make this secure, it's still possible it's not. I wouldn't run this code outside of a secure prison of some sort, and definitely not anything connected to a database whose data you care about. (I intend to run this on Heroku.)
+Note that while I made a concentrated effort to make this secure, it's still possible it's not. I wouldn't run this code outside of a secure prison of some sort, and definitely not on anything connected to a database whose data you care about. (I intend to run this on Heroku without a database.)
 
 ## Set It Up
 
