@@ -14,7 +14,7 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "Sandrbox"
+  gem.name = "sandrbox"
   gem.homepage = "http://github.com/Veraticus/Sandrbox"
   gem.license = "MIT"
   gem.summary = 'A sanitizing sandbox for executing Ruby code'

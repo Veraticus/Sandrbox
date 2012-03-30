@@ -37,7 +37,7 @@ Sandrbox.perform(['Foo.new.test']).output # => ["NameError: uninitialized consta
 Sandrbox.perform(['class Foo']).output # => []
 Sandrbox.perform(['class Foo']).complete? # => false
 Sandrbox.perform(['class Foo']).indent_level # => 1
-Sandrbox.perform(['class Foo']).indent_character # => class
+Sandrbox.perform(['class Foo']).indent_character # => "class"
 ```
 
 ## Copyright
