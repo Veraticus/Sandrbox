@@ -12,12 +12,16 @@ describe "Sandbox" do
   
   it 'allows constants to be used after uninitializing them' do
     Sandbox.perform(['a = 1 + 1'])
-    lambda {Object.const_get(:File)}.should_not raise_error(NameError)
+    lambda {Object.const_get(:File)}.should_not raise_error
   end
   
   it 'allows methods to be called after removing them' do
     Sandbox.perform(['a = 1 + 1'])
     Kernel.methods.should include(:exit)
+  end
+  
+  it 'only waits half a second for each command' do
+    Sandbox.perform(['sleep 5']).should == ["Timeout::Error: execution expired"]
   end
   
   context 'unsafe commands' do

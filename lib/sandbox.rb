@@ -1,8 +1,7 @@
 require 'irb'
+require 'timeout'
 
 module Sandbox
-  module Workspace; end
-  
   @@bad_methods = [
     [:Object, :exit],
     [:Kernel, :exit],
@@ -27,7 +26,7 @@ module Sandbox
     [:Class, "`".to_sym]
   ]
   
-  @@bad_constants = [:Open3, :File, :Dir, :IO, :Sandbox]
+  @@bad_constants = [:Open3, :File, :Dir, :IO, :Sandbox, :Process, :Thread, :Fiber]
   
   @@unbound_methods = []
   @@unbound_constants = []
@@ -43,20 +42,28 @@ module Sandbox
   def self.perform(array)
     returning_array = []
     @@binding = TOPLEVEL_BINDING
-    Thread.new do
+    
+    t = Thread.new do
       $SAFE = 2
       array.each_with_index do |line, line_no|
-        @@bad_methods.each {|meth| self.remove_method(meth.first, meth.last)}
-        @@bad_constants.each {|const| self.remove_constant(const)}
         begin
-          returning_array << eval(line, @@binding, "sandbox", line_no)
+          Timeout::timeout(0.5) do
+            @@bad_methods.each {|meth| self.remove_method(meth.first, meth.last)}
+            @@bad_constants.each {|const| self.remove_constant(const)}
+            returning_array << eval(line, @@binding, "sandbox", line_no)
+          end
         rescue Exception => e
           returning_array << "#{e.class}: #{e.to_s}"
+        ensure
+          self.restore_constants
+          self.restore_methods
         end
-        self.restore_constants
-        self.restore_methods
       end
-    end.join
+    end
+    
+    result = t.join(3)
+    returning_array << "SandboxError: execution expired" if result.nil?
+    
     returning_array
   end
   
