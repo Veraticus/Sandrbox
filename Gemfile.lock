@@ -2,7 +2,6 @@ GEM
   remote: http://rubygems.org/
   specs:
     diff-lcs (1.1.3)
-    fakefs (0.4.0)
     git (1.2.5)
     github-markup (0.7.1)
     jeweler (1.8.3)
@@ -33,7 +32,6 @@ PLATFORMS
 
 DEPENDENCIES
   bundler
-  fakefs
   github-markup
   jeweler
   mocha

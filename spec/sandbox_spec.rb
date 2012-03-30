@@ -22,23 +22,23 @@ describe "Sandbox" do
   
   context 'unsafe commands' do
     it 'does not exit' do
-      Sandbox.perform(['exit']).should == ["NameError: undefined local variable or method `exit'"]
+      Sandbox.perform(['exit']).should == ["NameError: undefined local variable or method `exit' for Object:Class"]
     end
     
     it 'does not exit for kernel' do
-      Sandbox.perform(['Kernel.exit']).should == ["NameError: undefined local variable or method `exit'"]
+      Sandbox.perform(['Kernel.exit']).should == ["NameError: undefined local variable or method `exit' for Kernel:Module"]
     end
     
     it 'does not exec' do
-      Sandbox.perform(['exec("ps")']).should == ["NameError: undefined local variable or method `exec'"]
+      Sandbox.perform(['exec("ps")']).should == ["NameError: undefined local variable or method `exec' for Object:Class"]
     end
     
     it 'does not exec for kernel' do
-      Sandbox.perform(['Kernel.exec("ps")']).should == ["NameError: undefined local variable or method `exec'"]
+      Sandbox.perform(['Kernel.exec("ps")']).should == ["NameError: undefined local variable or method `exec' for Kernel:Module"]
     end
     
     it 'does not `' do
-      Sandbox.perform(['`ls`']).should == ["NameError: undefined local variable or method `ls' for main:Object"]
+      Sandbox.perform(['`ls`']).should == ["NameError: undefined local variable or method ``' for Object:Class"]
     end
     
     it 'does not implement File' do
@@ -58,11 +58,11 @@ describe "Sandbox" do
     end
     
     it 'does not implement Open3 even after requiring it' do
-      Sandbox.perform(['require "open3"', 'Open3']).should == [false, "NameError: uninitialized constant Open3"]
+      Sandbox.perform(['require "open3"', 'Open3']).should == ["NameError: undefined local variable or method `require' for Object:Class", "NameError: uninitialized constant Open3"]
     end
     
     it 'does not allow you to manually call protected Sandbox methods' do
-      raise Sandbox.perform(['Sandbox.class_variable_get("@@unbound_constants".to_sym).first']).inspect
+      Sandbox.perform(['Sandbox.class_variable_get("@@unbound_constants".to_sym).first']).should == ["NameError: uninitialized constant Sandbox"]
     end
   end
 end

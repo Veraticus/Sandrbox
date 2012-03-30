@@ -1,7 +1,5 @@
 source "http://rubygems.org"
 
-gem 'fakefs'
-
 group :development do
   gem "mocha"
   gem "rake"
