@@ -1,6 +1,6 @@
 module Sandrbox
   class Value
-    attr_accessor :line, :line_no, :result, :time, :unbound_methods, :unbound_constants
+    attr_accessor :line, :line_no, :result, :time, :unbound_methods, :unbound_constants, :error
     
     def initialize(line, line_no)
       self.unbound_methods = []
@@ -21,6 +21,7 @@ module Sandrbox
           end
         rescue Exception => e
           self.result = "#{e.class}: #{e.to_s}"
+          self.error = true
         ensure
           restore_constants
           restore_methods
@@ -28,7 +29,10 @@ module Sandrbox
       end
       
       timeout = t.join(3)
-      self.result = "SandrboxError: execution expired" if timeout.nil?
+      if timeout.nil?
+        self.result = "SandrboxError: execution expired" 
+        self.error = true
+      end
 
       self
     end

@@ -10,8 +10,8 @@ I automatically remove all the bad methods and classes I can think of. But maybe
 
 ```ruby
 Sandrbox.configure do |config|
-  config.bad_classes << [:Rails]
-  config.bad_classes << [:ActiveRecord]
+  config.bad_constants << :Rails
+  config.bad_constants << :ActiveRecord
 end
 ```
 
